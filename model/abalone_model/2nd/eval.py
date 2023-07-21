@@ -10,7 +10,7 @@ def get_Accuracy(y, y_pred):
 
     return acc
 
-# Metrics 출력
+# Custom Accuracy 추가된 Metrics 출력
 def get_metrics(model, X, y, cv_n=3):
     y_pred=model.predict(X)
     
