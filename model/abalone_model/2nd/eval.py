@@ -30,8 +30,8 @@ def get_metrics(model, X, y, cv_n=3):
 
 def total_score(model, X_train, X_test, y_train, y_test):
 
-    print('CatBoostRegressor 훈련성능')
+    print('훈련성능')
     get_metrics(model, X_train, y_train)
     print('-'*100)
-    print('CatBoostRegressor 평가성능')
+    print('평가성능')
     get_metrics(model, X_test, y_test)
