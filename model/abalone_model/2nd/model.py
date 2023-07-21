@@ -113,7 +113,7 @@ def catboostregressor(df, train_size = 0.8, Scaler = None):
         X_test = pd.DataFrame(X_test, columns=X.columns)
 
     # 학습
-    model = CatBoostRegressor()
+    model = CatBoostRegressor(random_state = 0)
     model.fit(X_train, y_train)
 
     return X_train, X_test, y_train, y_test, model
@@ -141,7 +141,7 @@ def lgbmregressor(df, train_size = 0.8, Scaler = None):
 
 
     # 학습
-    model = LGBMRegressor()
+    model = LGBMRegressor(random_state = 0)
     model.fit(X_train, y_train)
 
     return X_train, X_test, y_train, y_test, model
