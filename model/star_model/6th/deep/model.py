@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from imblearn.over_sampling import ADASYN
 
 import tensorflow as tf
@@ -12,7 +12,7 @@ from tensorflow.keras.regularizers import L1L2
 from timeit import default_timer as timer
 
 class Model():
-    def __init__(self, csv_loca='../../../data/star.csv"', weight = 'model.h5', TEST_SIZE=0.2, VAL_SIZE=0.2, RANDOM_STATE=42):
+    def __init__(self, csv_loca='star.csv', weight = 'model.h5', TEST_SIZE=0.2, VAL_SIZE=0.2, RANDOM_STATE=42):
        # 데이터 불러오기
        self.df = pd.read_csv(csv_loca)
        
@@ -28,14 +28,14 @@ class Model():
        self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(self.X_train, self.y_train, test_size=VAL_SIZE, stratify = self.y_train, random_state=RANDOM_STATE)
        
        # 표준화
-       self.scaler = MinMaxScaler()
+       self.scaler = StandardScaler()
        self.X_train = self.scaler.fit_transform(self.X_train)
        self.X_val = self.scaler.fit_transform(self.X_val)
        self.X_test = self.scaler.transform(self.X_test)
        
        # 모델 생성
        self.model = self.modelling()
-       self.model.load_weight(weight)
+       self.model.load_weights(weight)
   
     def modelling(self, drop_rate= 0.1, activation= 'relu'):
        # 모델 만들기
@@ -45,11 +45,15 @@ class Model():
        self.regularizer = L1L2(l1=0.001, l2=0.001)
        
        model = Sequential([Layer.Dense(12, input_shape=(8,))])
-       model.add(Layer.Dense(8, activation = activation, kernel_regularizer=regularizer))
+       model.add(Layer.Dense(8, activation = activation, kernel_regularizer=self.regularizer))
+       model.add(Layer.BatchNormalization())
+       model.add(Layer.Dropout(drop_rate))
+
+       model.add(Layer.Dense(6, activation = activation, kernel_regularizer=self.regularizer))
        model.add(Layer.BatchNormalization())
        model.add(Layer.Dropout(drop_rate))
        
-       model.add(Layer.Dense(4, activation = activation, kernel_regularizer=regularizer))
+       model.add(Layer.Dense(4, activation = activation, kernel_regularizer=self.regularizer))
        model.add(Layer.BatchNormalization())
        model.add(Layer.Dropout(drop_rate))
        model.add(Layer.Dense(1, activation = 'sigmoid'))
@@ -80,9 +84,16 @@ class Model():
         input_list = [Mean_i, SD_i, EK_i, S_i, Mean_curve,SD_curve, EK_curve, S_curve]
         print(f'input list: {input_list}')
 
-        input_scaled = self.scaler.transform(input_list)
-        print(f'scaled input list: {input_scaled}')
+        input_scaled = self.scaler.transform([input_list])
 
         result = self.model.predict(input_scaled, verbose = 0)
 
-        return result
+        if result[0] == 1:
+            return '중성자별입니다'
+        else:
+            return '중성자별이 아닙니다'
+    
+result = Model().own_input()
+
+# 결과 출력
+print("Result:", result)
