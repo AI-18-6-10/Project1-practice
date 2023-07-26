@@ -30,8 +30,7 @@ def predict_abalone_rings():
         Sex_I = 1
 
     if Sex == 'M':
-        Sex_M = 1
-
+        Sex_M = 1        
 
     # 리스트로 변형
     input_list = [Length, Diameter, Height, Whole_weight, Shucked_weight, Viscera_weight, Shell_weight, Sex_F, Sex_I, Sex_M]
