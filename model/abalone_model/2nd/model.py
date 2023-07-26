@@ -88,7 +88,7 @@ def randomforestregressor(df, train_size = 0.8, Scaler = None):
         X_test = pd.DataFrame(X_test, columns=X.columns)
 
     # 학습
-    model = RandomForestRegressor(random_state=0)
+    model = RandomForestRegressor(n_estimators=100000, criterion='squared_error', min_samples_split=20, min_samples_leaf=20, max_samples= 25, max_depth= 5, random_state=0)
     model.fit(X_train, y_train)
 
     return X_train, X_test, y_train, y_test, model

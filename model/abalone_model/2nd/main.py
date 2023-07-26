@@ -1,17 +1,18 @@
 import joblib
 import numpy as np
-# import warnings
-# warnings.filterwarnings("ignore", category=UserWarning)
+import warnings
 
-def predict_neutron_star():
+warnings.filterwarnings("ignore", category=UserWarning)
+
+def predict_abalone_rings():
     # 1. 모델 불러오기
-    model = joblib.load('saved/cat_model_v1.pkl')
+    model = joblib.load('cat_model_v1.pkl')
 
     # 2. scaler 불러오기
-    scaler = joblib.load('saved/minmaxscaler.pkl')
+    scaler = joblib.load('minmaxscaler.pkl')
     
     # 입력값 받기
-    Sex = input("Enter Sex: ")
+    Sex = input("Enter Sex(F, M, I): ")
     Length = input("Enter Length: ")
     Diameter = input("Enter Diameter: ")
     Height = input("Enter Height: ")
@@ -19,17 +20,18 @@ def predict_neutron_star():
     Shucked_weight = input("Enter Shucked weight: ")
     Viscera_weight = input("Enter Viscera weight: ")
     Shell_weight = input("Enter Shell weight: ")
-    Rings = input("Enter Rings(Target): ")
+    Rings = input("Enter Real Rings to compare with Prediction(Target): ")
     Sex_F, Sex_I, Sex_M = 0, 0, 0
     
     if Sex == 'F':
         Sex_F = 1
     
-    if Sex == 'M':
-        Sex_I = 1
-    
     if Sex == 'I':
+        Sex_I = 1
+
+    if Sex == 'M':
         Sex_M = 1
+
 
     # 리스트로 변형
     input_list = [Length, Diameter, Height, Whole_weight, Shucked_weight, Viscera_weight, Shell_weight, Sex_F, Sex_I, Sex_M]
@@ -42,4 +44,4 @@ def predict_neutron_star():
     prediction = model.predict(input_data_scaled)
     print(prediction, Rings)
 
-predict_neutron_star()
+predict_abalone_rings()
